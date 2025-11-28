@@ -53,11 +53,263 @@
   - Types: Port-based, MAC-based, protocol-based, policy-based
   - VLAN Trunking: Carries multiple VLANs over single link (802.1Q)
 
-- **Spanning Tree Protocol (STP)**:
+**Detailed VLAN Concepts:**
+
+**VLAN Benefits:**
+- **Broadcast Domain Segmentation**: Reduces broadcast traffic
+- **Security**: Isolates sensitive departments
+- **Flexibility**: Logical grouping independent of physical location
+- **Cost Efficiency**: Reduces need for additional hardware
+
+**VLAN ID Ranges:**
+- **Normal Range**: 1-1005 (stored in VLAN database)
+- **Extended Range**: 1006-4094 (VTP v3 only, stored in running config)
+- **Reserved VLANs**: 
+  - VLAN 1: Default VLAN (cannot be deleted)
+  - VLAN 1002-1005: FDDI/Token Ring (legacy)
+
+**802.1Q Trunking Protocol:**
+
+**802.1Q Frame Structure:**
+
+```
+Original Ethernet Frame:
+| Dst MAC | Src MAC | Type | Data | FCS |
+
+802.1Q Tagged Frame:
+| Dst MAC | Src MAC | 0x8100 | PRI | CFI | VLAN ID | Type | Data | FCS |
+                            (4 bytes tag inserted here)
+```
+
+**802.1Q Tag Fields:**
+- **TPID (Tag Protocol Identifier)**: 0x8100 (identifies 802.1Q frame)
+- **PRI (Priority)**: 3 bits for QoS (0-7)
+- **CFI (Canonical Format Indicator)**: 1 bit (always 0 for Ethernet)
+- **VID (VLAN ID)**: 12 bits (1-4094)
+
+**Native VLAN:**
+- Untagged traffic on trunk links
+- Default: VLAN 1
+- **Important**: Native VLAN must match on both ends
+
+**VLAN Configuration Example (Cisco):**
+
+```cisco
+! Create VLAN
+vlan 10
+  name SALES
+
+vlan 20
+  name ENGINEERING
+
+! Assign access port to VLAN
+interface GigabitEthernet0/1
+  switchport mode access
+  switchport access vlan 10
+
+! Configure trunk port
+interface GigabitEthernet0/24
+  switchport mode trunk
+  switchport trunk native vlan 100
+  switchport trunk allowed vlan 10,20,100
+  ! OR allow all VLANs:
+  ! switchport trunk allowed vlan all
+
+! Configure trunk encapsulation (older switches)
+interface GigabitEthernet0/24
+  switchport trunk encapsulation dot1q
+  switchport mode trunk
+
+! Verify VLAN configuration
+show vlan brief
+show vlan id 10
+show interfaces trunk
+show interfaces Gi0/24 switchport
+```
+
+**Inter-VLAN Routing:**
+
+To enable communication between VLANs, a router or Layer 3 switch is required:
+
+**Router-on-a-Stick Configuration:**
+
+```cisco
+! Router Configuration
+interface GigabitEthernet0/0.10
+  encapsulation dot1Q 10
+  ip address 192.168.10.1 255.255.255.0
+
+interface GigabitEthernet0/0.20
+  encapsulation dot1Q 20
+  ip address 192.168.20.1 255.255.255.0
+
+! Switch Configuration
+interface GigabitEthernet0/24
+  switchport mode trunk
+```
+
+**Layer 3 Switch (SVI - Switched Virtual Interface):**
+
+```cisco
+! Enable IP routing
+ip routing
+
+! Configure SVI for each VLAN
+interface vlan 10
+  ip address 192.168.10.1 255.255.255.0
+  no shutdown
+
+interface vlan 20
+  ip address 192.168.20.1 255.255.255.0
+  no shutdown
+```
+
+**VLAN Trunking Protocol (VTP):**
+
+**VTP Modes:**
+- **Server**: Can create, modify, delete VLANs (propagates to all)
+- **Client**: Receives VLAN updates, cannot modify locally
+- **Transparent**: Forwards VTP messages but doesn't participate
+
+**VTP Configuration:**
+
+```cisco
+! Configure VTP domain
+vtp domain COMPANY
+vtp mode server
+vtp version 2
+
+! Verify VTP status
+show vtp status
+show vtp password
+```
+
+- **Spanning Tree Protocol (STP)**: 
   - Prevents loops in switched networks
   - Protocol: IEEE 802.1D
   - States: Blocking, Listening, Learning, Forwarding, Disabled
   - Enhanced versions: RSTP (Rapid STP), MSTP (Multiple STP)
+
+**Detailed STP Operation (IEEE 802.1D):**
+
+**STP Algorithm Steps:**
+
+1. **Elect Root Bridge**:
+   - Lowest Bridge ID wins (Priority + MAC Address)
+   - Default priority: 32768
+   - Example: Priority 4096 = 4096.0000.0000.0001
+
+2. **Select Root Ports**:
+   - One root port per non-root bridge
+   - Lowest cost path to root bridge
+
+3. **Select Designated Ports**:
+   - One designated port per segment
+   - Lowest cost path to root bridge
+
+4. **Block Remaining Ports**:
+   - All other ports become blocking
+   - Prevents loops
+
+**STP Port States:**
+
+- **Blocking**: 
+  - Receives BPDUs, does not forward frames
+  - Duration: 20 seconds (max age timer)
+  - Can transition to listening state
+
+- **Listening**: 
+  - Receives and sends BPDUs
+  - No MAC address learning
+  - Duration: 15 seconds (forward delay timer)
+  - Elects root/designated ports
+
+- **Learning**: 
+  - Receives and sends BPDUs
+  - Builds MAC address table
+  - Duration: 15 seconds (forward delay timer)
+
+- **Forwarding**: 
+  - Normal operation
+  - Forwards frames and learns MAC addresses
+  - Only root and designated ports reach this state
+
+- **Disabled**: 
+  - Administratively shut down
+  - Does not participate in STP
+
+**STP Timers:**
+- **Hello Timer**: 2 seconds (BPDU interval)
+- **Max Age**: 20 seconds (maximum BPDU age)
+- **Forward Delay**: 15 seconds (listening + learning)
+
+**STP Port Costs (Legacy):**
+
+| Link Speed | Cost |
+|------------|------|
+| 10 Mbps | 100 |
+| 100 Mbps | 19 |
+| 1 Gbps | 4 |
+| 10 Gbps | 2 |
+
+**Rapid STP (RSTP) - IEEE 802.1w:**
+
+**RSTP Improvements:**
+- Faster convergence (1-3 seconds vs 30-50 seconds)
+- New port roles and states
+- Backup port role for redundancy
+- Proposal/Agreement mechanism
+
+**RSTP Port Roles:**
+- **Root Port**: Best path to root (same as STP)
+- **Designated Port**: Best path on a segment
+- **Alternate Port**: Backup root port
+- **Backup Port**: Backup designated port
+- **Disabled**: Not participating
+
+**RSTP Port States:**
+- **Discarding**: Replaces blocking/listening (no forwarding, no learning)
+- **Learning**: Builds MAC table, no forwarding
+- **Forwarding**: Normal operation
+
+**RSTP Configuration Example (Cisco):**
+
+```cisco
+! Enable RSTP globally
+spanning-tree mode rapid-pvst
+
+! Configure priority for root bridge
+spanning-tree vlan 10 priority 4096
+
+! Configure port cost
+interface GigabitEthernet0/1
+  spanning-tree cost 2000
+
+! Configure port priority
+interface GigabitEthernet0/1
+  spanning-tree port-priority 128
+
+! View STP status
+show spanning-tree
+show spanning-tree root
+show spanning-tree interface Gi0/1 detail
+```
+
+**STP Troubleshooting Commands:**
+
+```cisco
+! View STP topology
+show spanning-tree summary
+show spanning-tree vlan 10
+show spanning-tree root detail
+
+! Verify BPDUs
+debug spanning-tree events
+show spanning-tree inconsistentports
+
+! Force recalculation
+clear spanning-tree detected-protocols
+```
 
 **Link Aggregation:**
 

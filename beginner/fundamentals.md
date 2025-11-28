@@ -267,6 +267,95 @@ The TCP/IP model simplifies the OSI model into four practical layers used in rea
 - Broadcast Address: 192.168.1.255
 - Usable Host Range: 192.168.1.1 to 192.168.1.254 (254 hosts)
 
+#### Detailed Subnetting Calculations
+
+**Understanding CIDR Notation:**
+
+CIDR (Classless Inter-Domain Routing) notation expresses both the IP address and its subnet mask in a single format: `IP_address/prefix_length`
+
+- **Prefix Length**: Number of bits used for the network portion
+- Example: `192.168.1.0/24` means:
+  - First 24 bits = network portion
+  - Last 8 bits = host portion
+  - Subnet mask: 255.255.255.0
+
+**Step-by-Step Subnetting Calculation:**
+
+**Example 1: Creating 4 Subnets from 192.168.1.0/24**
+
+1. **Determine required subnets**: Need 4 subnets
+2. **Calculate subnet bits**: 2^2 = 4 subnets (need 2 bits)
+3. **Calculate new prefix**: 24 + 2 = /26
+4. **Calculate hosts per subnet**: 2^(32-26) - 2 = 2^6 - 2 = 64 - 2 = 62 hosts per subnet
+5. **Subnet mask**: 255.255.255.192 (binary: 11111111.11111111.11111111.11000000)
+
+**Subnet Breakdown:**
+- **Subnet 1**: 192.168.1.0/26
+  - Network: 192.168.1.0
+  - Broadcast: 192.168.1.63
+  - Hosts: 192.168.1.1 to 192.168.1.62 (62 hosts)
+
+- **Subnet 2**: 192.168.1.64/26
+  - Network: 192.168.1.64
+  - Broadcast: 192.168.1.127
+  - Hosts: 192.168.1.65 to 192.168.1.126 (62 hosts)
+
+- **Subnet 3**: 192.168.1.128/26
+  - Network: 192.168.1.128
+  - Broadcast: 192.168.1.191
+  - Hosts: 192.168.1.129 to 192.168.1.190 (62 hosts)
+
+- **Subnet 4**: 192.168.1.192/26
+  - Network: 192.168.1.192
+  - Broadcast: 192.168.1.255
+  - Hosts: 192.168.1.193 to 192.168.1.254 (62 hosts)
+
+**Example 2: Variable Length Subnet Mask (VLSM)**
+
+**Scenario**: Need to subnet 172.16.0.0/16 for:
+- LAN A: 500 hosts
+- LAN B: 200 hosts
+- LAN C: 50 hosts
+- WAN links: 2 hosts each (5 links)
+
+**Calculations:**
+
+1. **LAN A (500 hosts)**: Need 2^9 = 512 addresses (9 host bits)
+   - Subnet: 172.16.0.0/23
+   - Hosts: 172.16.0.1 to 172.16.1.254 (510 usable)
+
+2. **LAN B (200 hosts)**: Need 2^8 = 256 addresses (8 host bits)
+   - Subnet: 172.16.2.0/24
+   - Hosts: 172.16.2.1 to 172.16.2.254 (254 usable)
+
+3. **LAN C (50 hosts)**: Need 2^6 = 64 addresses (6 host bits)
+   - Subnet: 172.16.3.0/26
+   - Hosts: 172.16.3.1 to 172.16.3.62 (62 usable)
+
+4. **WAN Links (2 hosts each)**: Need 2^2 = 4 addresses (2 host bits)
+   - Link 1: 172.16.3.64/30 (hosts: .65, .66)
+   - Link 2: 172.16.3.68/30 (hosts: .69, .70)
+   - Link 3: 172.16.3.72/30 (hosts: .73, .74)
+   - Link 4: 172.16.3.76/30 (hosts: .77, .78)
+   - Link 5: 172.16.3.80/30 (hosts: .81, .82)
+
+**Subnetting Cheat Sheet:**
+
+| Prefix | Subnet Mask | Hosts | Networks (/24) |
+|--------|-------------|-------|----------------|
+| /30 | 255.255.255.252 | 2 | 64 |
+| /29 | 255.255.255.248 | 6 | 32 |
+| /28 | 255.255.255.240 | 14 | 16 |
+| /27 | 255.255.255.224 | 30 | 8 |
+| /26 | 255.255.255.192 | 62 | 4 |
+| /25 | 255.255.255.128 | 126 | 2 |
+| /24 | 255.255.255.0 | 254 | 1 |
+
+**Formula Reference:**
+- Number of subnets = 2^(subnet_bits)
+- Hosts per subnet = 2^(host_bits) - 2
+- Block size = 2^(host_bits)
+
 ### 1.8 Basic Protocols
 
 **HTTP/HTTPS (Hypertext Transfer Protocol):**
@@ -284,11 +373,161 @@ The TCP/IP model simplifies the OSI model into four practical layers used in rea
 - Record types: A, AAAA, CNAME, MX, NS, PTR, TXT
 - Resolvers and authoritative servers
 
+**Detailed DNS Resolution Process (RFC 1034, RFC 1035):**
+
+**DNS Query Types:**
+- **Recursive Query**: Client asks DNS server to resolve fully
+- **Iterative Query**: DNS server refers client to another server
+
+**DNS Resolution Steps:**
+
+1. **Client Request**: Browser requests "www.example.com"
+2. **Local Cache Check**: Client checks local DNS cache first
+3. **Recursive Resolver**: Queries ISP's DNS resolver
+4. **Root Server**: Resolver queries root DNS server (.)
+5. **TLD Server**: Root refers to .com TLD server
+6. **Authoritative Server**: TLD refers to example.com nameserver
+7. **IP Address Returned**: Authoritative server returns IP address
+8. **Cache Storage**: Resolver caches result for TTL period
+
+**DNS Record Types:**
+
+- **A Record**: Maps hostname to IPv4 address
+  ```
+  www.example.com.    IN    A    192.0.2.1
+  ```
+
+- **AAAA Record**: Maps hostname to IPv6 address
+  ```
+  www.example.com.    IN    AAAA    2001:db8::1
+  ```
+
+- **CNAME Record**: Canonical name (alias)
+  ```
+  www.example.com.    IN    CNAME    example.com.
+  ```
+
+- **MX Record**: Mail exchange server
+  ```
+  example.com.        IN    MX    10    mail.example.com.
+  ```
+
+- **NS Record**: Nameserver delegation
+  ```
+  example.com.        IN    NS    ns1.example.com.
+  ```
+
+- **PTR Record**: Reverse DNS (IP to name)
+  ```
+  1.2.0.192.in-addr.arpa.    IN    PTR    www.example.com.
+  ```
+
+- **TXT Record**: Text information (SPF, DKIM)
+  ```
+  example.com.    IN    TXT    "v=spf1 mx ~all"
+  ```
+
+**DNS Query Commands:**
+
+```bash
+# Basic DNS lookup
+nslookup www.example.com
+nslookup -type=MX example.com    # Query MX records
+nslookup -type=AAAA example.com  # Query IPv6 records
+
+# Detailed DNS queries (Linux/Mac)
+dig www.example.com
+dig example.com MX               # Query MX records
+dig @8.8.8.8 example.com        # Query specific DNS server
+dig +trace example.com          # Trace DNS resolution path
+dig -x 192.0.2.1                # Reverse DNS lookup
+
+# Windows PowerShell
+Resolve-DnsName example.com
+Resolve-DnsName example.com -Type MX
+```
+
+**DNS Configuration Files:**
+
+```bash
+# Linux: /etc/resolv.conf
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+search example.com
+
+# Windows: Network adapter settings or PowerShell
+Set-DnsClientServerAddress -InterfaceIndex 12 -ServerAddresses 8.8.8.8,8.8.4.4
+```
+
 **DHCP (Dynamic Host Configuration Protocol):**
 - Automatically assigns IP addresses and network configuration (ports 67/68)
 - DORA process: Discover, Offer, Request, Acknowledge
 - Lease time management
 - DHCP relay agents
+
+**Detailed DHCP DORA Process (RFC 2131):**
+
+1. **DISCOVER** (Client → Server):
+   - Client broadcasts DHCPDISCOVER message (UDP port 67)
+   - Source IP: 0.0.0.0 (client has no IP yet)
+   - Destination IP: 255.255.255.255 (broadcast)
+   - Contains: Client MAC address, requested parameters
+
+2. **OFFER** (Server → Client):
+   - DHCP server(s) respond with DHCPOFFER message
+   - Contains: Offered IP address, subnet mask, lease time, default gateway, DNS servers
+   - Server reserves the IP address temporarily
+
+3. **REQUEST** (Client → Server):
+   - Client broadcasts DHCPREQUEST message
+   - Accepts offer from chosen server
+   - May include option to request specific IP (if renewing)
+
+4. **ACKNOWLEDGE** (Server → Client):
+   - Server sends DHCPACK confirming the lease
+   - Client configures its interface with provided parameters
+   - Lease timer starts
+
+**DHCP Lease Renewal Process:**
+
+- **T1 (50% of lease)**: Client attempts renewal with original server (unicast)
+- **T2 (87.5% of lease)**: If T1 fails, client broadcasts REQUEST for any server
+- **Lease Expiration**: Client must release IP or request new lease
+
+**DHCP Relay Agent Configuration:**
+
+```bash
+# Cisco Router DHCP Relay Configuration
+interface GigabitEthernet0/0
+  ip helper-address 192.168.100.10  # DHCP Server IP
+  ip address 192.168.1.1 255.255.255.0
+```
+
+**DHCP Options (Common):**
+- **Option 1**: Subnet Mask
+- **Option 3**: Default Gateway (Router)
+- **Option 6**: DNS Servers
+- **Option 51**: IP Address Lease Time
+- **Option 82**: Relay Agent Information (for DHCP snooping)
+
+**Verification Commands:**
+
+```bash
+# Windows
+ipconfig /all                    # View DHCP lease details
+ipconfig /release                # Release DHCP lease
+ipconfig /renew                  # Renew DHCP lease
+
+# Linux
+dhclient -v                      # Request/renew DHCP lease
+dhclient -r                      # Release DHCP lease
+cat /var/lib/dhcp/dhclient.leases # View lease information
+
+# Router/Switch (Cisco)
+show ip dhcp binding             # View DHCP bindings
+show ip dhcp pool                # View DHCP pool configuration
+debug ip dhcp server events      # Debug DHCP process
+```
 
 **FTP (File Transfer Protocol):**
 - Transfers files between hosts (ports 20/21)
@@ -356,5 +595,208 @@ The TCP/IP model simplifies the OSI model into four practical layers used in rea
 - Packet analyzer for deep inspection
 - Captures and analyzes network traffic
 - GUI-based tool with powerful filtering
+
+---
+
+## 1.10 Detailed Protocol Explanations
+
+### TCP/IP Protocol Deep Dive
+
+#### TCP (Transmission Control Protocol) - RFC 793
+
+**TCP Characteristics:**
+- **Connection-oriented**: Establishes connection before data transfer
+- **Reliable**: Guarantees delivery and ordering
+- **Flow Control**: Prevents sender from overwhelming receiver
+- **Congestion Control**: Adapts to network conditions
+- **Full-duplex**: Bi-directional communication
+
+**TCP Three-Way Handshake:**
+
+The TCP connection establishment process:
+
+```
+1. CLIENT → SERVER: SYN (Synchronize)
+   - Sets SYN flag = 1
+   - Random initial sequence number (e.g., seq = 1000)
+   - Client enters SYN-SENT state
+
+2. SERVER → CLIENT: SYN-ACK (Synchronize-Acknowledge)
+   - Sets SYN flag = 1, ACK flag = 1
+   - Acknowledges client's sequence number (ack = 1001)
+   - Server's random sequence number (e.g., seq = 5000)
+   - Server enters SYN-RECEIVED state
+
+3. CLIENT → SERVER: ACK (Acknowledge)
+   - Sets ACK flag = 1
+   - Acknowledges server's sequence number (ack = 5001)
+   - Increments own sequence number (seq = 1001)
+   - Both enter ESTABLISHED state
+
+Connection Established - Data transfer can begin
+```
+
+**TCP Header Structure (20 bytes minimum):**
+
+```
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Source Port          |       Destination Port        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        Sequence Number                        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Acknowledgment Number                      |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|  Data |           |U|A|P|R|S|F|                               |
+| Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+|       |           |G|K|H|T|N|N|                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Checksum            |         Urgent Pointer        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                    Options                    |    Padding    |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+**TCP Flags:**
+- **SYN**: Synchronize sequence numbers (connection initiation)
+- **ACK**: Acknowledgment field is valid
+- **FIN**: Finish (connection termination)
+- **RST**: Reset connection
+- **PSH**: Push function (immediate delivery)
+- **URG**: Urgent pointer is valid
+
+**TCP Connection Termination (Four-Way Handshake):**
+
+```
+1. CLIENT → SERVER: FIN
+   - Client wants to close connection
+   - Client enters FIN-WAIT-1 state
+
+2. SERVER → CLIENT: ACK
+   - Server acknowledges FIN
+   - Server enters CLOSE-WAIT state
+   - Client enters FIN-WAIT-2 state
+
+3. SERVER → CLIENT: FIN
+   - Server is ready to close
+   - Server enters LAST-ACK state
+
+4. CLIENT → SERVER: ACK
+   - Client acknowledges server's FIN
+   - Client enters TIME-WAIT state (2MSL)
+   - Server enters CLOSED state
+```
+
+**TCP Flow Control:**
+
+- **Window Size**: Amount of data receiver can accept
+- **Sliding Window**: Window size adjusts based on receiver buffer
+- **Zero Window**: Receiver sends window size = 0 to pause transmission
+
+**TCP Congestion Control Algorithms:**
+
+- **Slow Start**: Exponential increase in congestion window
+- **Congestion Avoidance**: Linear increase after threshold
+- **Fast Retransmit**: Retransmit after 3 duplicate ACKs
+- **Fast Recovery**: Reduce congestion window by half
+
+#### UDP (User Datagram Protocol) - RFC 768
+
+**UDP Characteristics:**
+- **Connectionless**: No connection establishment
+- **Unreliable**: No delivery guarantees
+- **Low overhead**: 8-byte header (vs 20-byte TCP)
+- **No flow control or congestion control**
+- **Used for**: DNS, DHCP, SNMP, streaming media
+
+**UDP Header Structure (8 bytes):**
+
+```
+ 0      7 8     15 16    23 24    31
++--------+--------+--------+--------+
+|     Source      |   Destination   |
+|      Port       |      Port       |
++--------+--------+--------+--------+
+|                 |                 |
+|     Length      |    Checksum     |
++--------+--------+--------+--------+
+|                                   |
+|            Data                   |
++-----------------------------------+
+```
+
+**When to Use TCP vs UDP:**
+
+| TCP | UDP |
+|-----|-----|
+| HTTP, HTTPS, FTP, SSH, Telnet | DNS, DHCP, SNMP, TFTP |
+| Email (SMTP, IMAP) | Streaming media (RTP) |
+| Database connections | Real-time gaming |
+| File transfers | VoIP (some implementations) |
+
+#### ICMP (Internet Control Message Protocol) - RFC 792
+
+**ICMP Functions:**
+- Error reporting
+- Network diagnostics
+- Ping (Echo Request/Reply)
+- Traceroute (TTL exceeded messages)
+
+**Common ICMP Messages:**
+- **Type 0**: Echo Reply (ping reply)
+- **Type 3**: Destination Unreachable
+- **Type 8**: Echo Request (ping)
+- **Type 11**: Time Exceeded (traceroute)
+- **Type 12**: Parameter Problem
+
+#### ARP (Address Resolution Protocol) - RFC 826
+
+**ARP Process:**
+
+1. **Host A** wants to send packet to **Host B** (192.168.1.10)
+2. **Host A** checks ARP cache for 192.168.1.10's MAC address
+3. If not found, **Host A** broadcasts ARP Request:
+   - "Who has 192.168.1.10? Tell 192.168.1.5"
+4. **Host B** responds with ARP Reply:
+   - "192.168.1.10 is at MAC-address-XX:XX:XX:XX:XX:XX"
+5. **Host A** updates ARP cache and sends packet
+
+**ARP Table Commands:**
+
+```bash
+# View ARP cache
+arp -a                    # Windows/Linux
+ip neigh show            # Linux (iproute2)
+show ip arp              # Cisco IOS
+
+# Delete ARP entry
+arp -d 192.168.1.10      # Windows
+sudo arp -d 192.168.1.10 # Linux
+clear arp-cache          # Cisco IOS
+
+# Add static ARP entry
+arp -s 192.168.1.10 00-11-22-33-44-55  # Windows/Linux
+arp 192.168.1.10 0011.2233.4455 ARPA  # Cisco IOS
+```
+
+### Protocol References
+
+**RFC Documents:**
+- **RFC 791**: Internet Protocol (IP)
+- **RFC 792**: Internet Control Message Protocol (ICMP)
+- **RFC 793**: Transmission Control Protocol (TCP)
+- **RFC 768**: User Datagram Protocol (UDP)
+- **RFC 826**: Ethernet Address Resolution Protocol (ARP)
+- **RFC 2131**: Dynamic Host Configuration Protocol (DHCP)
+- **RFC 1034/1035**: Domain Name System (DNS)
+- **RFC 1918**: Address Allocation for Private Internets
+- **RFC 2460**: Internet Protocol, Version 6 (IPv6)
+
+**Trusted Online Resources:**
+- IETF RFC Repository: https://www.ietf.org/standards/rfcs/
+- Wireshark Protocol Reference: https://www.wireshark.org/docs/
+- Cisco Documentation: https://www.cisco.com/c/en/us/support/index.html
+- Network Encyclopedia: Various networking concepts and protocols
 
 ---
