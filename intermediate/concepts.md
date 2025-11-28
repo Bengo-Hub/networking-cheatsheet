@@ -318,6 +318,29 @@ clear spanning-tree detected-protocols
   - Standards: LACP (802.3ad), PAgP (Cisco proprietary)
   - Benefits: Increased bandwidth, redundancy, load balancing
 
+**EtherChannel Configuration:**
+
+```cisco
+! Configure EtherChannel (PAgP)
+interface range GigabitEthernet0/1-2
+  channel-group 1 mode desirable
+
+! Configure EtherChannel (LACP)
+interface range GigabitEthernet0/1-2
+  channel-group 1 mode active
+
+! Verify EtherChannel
+show etherchannel summary
+show etherchannel port-channel 1 detail
+```
+
+**EtherChannel Load Balancing:**
+```cisco
+! Configure load balancing method
+port-channel load-balance src-dst-ip  ! Source-destination IP
+port-channel load-balance src-dst-mac ! Source-destination MAC
+```
+
 ### 2.2 Routing Fundamentals
 
 **Routing Concepts:**
@@ -548,5 +571,72 @@ clear spanning-tree detected-protocols
 - Load balancing across multiple gateways
 - Single virtual IP, multiple virtual MACs
 - Active Virtual Forwarder (AVF) concept
+
+**FHRP Configuration Examples:**
+
+```cisco
+! HSRP Configuration
+interface GigabitEthernet0/0
+  ip address 192.168.1.2 255.255.255.0
+  standby 1 ip 192.168.1.1
+  standby 1 priority 110
+  standby 1 preempt
+
+! VRRP Configuration
+interface GigabitEthernet0/0
+  ip address 192.168.1.2 255.255.255.0
+  vrrp 1 ip 192.168.1.1
+  vrrp 1 priority 110
+  vrrp 1 preempt
+
+! GLBP Configuration
+interface GigabitEthernet0/0
+  ip address 192.168.1.2 255.255.255.0
+  glbp 1 ip 192.168.1.1
+  glbp 1 priority 110
+  glbp 1 preempt
+```
+
+**Verification Commands:**
+```cisco
+show standby          ! HSRP status
+show vrrp            ! VRRP status
+show glbp            ! GLBP status
+```
+
+---
+
+## References
+
+**Switching Standards:**
+- **IEEE 802.1D**: Spanning Tree Protocol
+- **IEEE 802.1w**: Rapid Spanning Tree Protocol (RSTP)
+- **IEEE 802.1Q**: VLAN Tagging
+- **IEEE 802.1s**: Multiple Spanning Tree Protocol (MSTP)
+- **IEEE 802.3ad**: Link Aggregation Control Protocol (LACP)
+
+**Routing Protocols:**
+- **RFC 2328**: OSPF Version 2
+- **RFC 4271**: Border Gateway Protocol 4 (BGP-4)
+- **RFC 2453**: RIP Version 2
+- **RFC 1142**: OSI IS-IS Intra-domain Routing Protocol
+
+**QoS:**
+- **RFC 2474**: Definition of the Differentiated Services Field (DS Field)
+- **RFC 2475**: An Architecture for Differentiated Services
+- **RFC 3246**: An Expedited Forwarding PHB (Per-Hop Behavior)
+
+**WAN Technologies:**
+- **RFC 2547**: BGP/MPLS VPNs
+- **RFC 4364**: BGP/MPLS IP Virtual Private Networks (L3VPN)
+
+**Trusted Resources:**
+- **Cisco Documentation**: https://www.cisco.com/c/en/us/support/index.html
+- **Juniper Documentation**: https://www.juniper.net/documentation/
+- **IETF RFC Repository**: https://www.ietf.org/standards/rfcs/
+
+**Related Documentation:**
+- For router configuration commands, see: [Configuration Cheatsheet](../docs/Configuration-Cheatsheet.md)
+- For IS-IS configuration examples, see: [IPv6 Workshop Guide](../docs/IPv6-Workshop-Guide.md)
 
 ---

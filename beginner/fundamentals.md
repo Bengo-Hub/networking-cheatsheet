@@ -794,9 +794,17 @@ arp 192.168.1.10 0011.2233.4455 ARPA  # Cisco IOS
 - **RFC 2460**: Internet Protocol, Version 6 (IPv6)
 
 **Trusted Online Resources:**
-- IETF RFC Repository: https://www.ietf.org/standards/rfcs/
-- Wireshark Protocol Reference: https://www.wireshark.org/docs/
-- Cisco Documentation: https://www.cisco.com/c/en/us/support/index.html
-- Network Encyclopedia: Various networking concepts and protocols
+- **IETF RFC Repository**: https://www.ietf.org/standards/rfcs/
+- **Wireshark Protocol Reference**: https://www.wireshark.org/docs/
+- **Cisco Documentation**: https://www.cisco.com/c/en/us/support/index.html
+- **Network Encyclopedia**: Various networking concepts and protocols
+- **GeeksforGeeks Networking**: https://www.geeksforgeeks.org/computer-network-tutorials/
+- **NetworkLessons**: Practical networking tutorials
+- **Packet Life Cheat Sheets**: http://packetlife.net/library/cheat-sheets/
+
+**Related Documentation:**
+- For router configuration commands, see: [Configuration Cheatsheet](../docs/Configuration-Cheatsheet.md)
+- For IPv6 implementation, see: [IPv6 Workshop Guide](../docs/IPv6-Workshop-Guide.md)
+- For lab address allocations, see: [Test Lab Addresses](../docs/Test-Lab-Addresses.md)
 
 ---
