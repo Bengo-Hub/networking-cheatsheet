@@ -8,6 +8,7 @@ This repository is organized into two main categories:
 
 1. **Main Guides**: Comprehensive documentation files
    - [Networking Principles Guide](Networking-Principles.md) - **Start here for learning networking**
+   - [Virtual Lab Setup Guide](docs/Virtual-Lab-Setup-Guide.md) - **Complete guide for setting up virtual networking labs**
    - [Router Configuration Cheatsheet](docs/Configuration-Cheatsheet.md) - Router configuration commands
    - [IPv6 Workshop Guide](docs/IPv6-Workshop-Guide.md) - IPv6 implementation guide
    - [Test Lab Addresses](docs/Test-Lab-Addresses.md) - Lab address allocations
@@ -33,6 +34,20 @@ A progressive, comprehensive guide organized by skill level and domain:
 - **[Security Principles](security/security-principles.md)**: Network security fundamentals
 - **[Troubleshooting](troubleshooting/troubleshooting.md)**: Problem-solving and optimization
 - **[Emerging Technologies](emerging-technologies/emerging-technologies.md)**: Future trends and innovations
+
+### 🖥️ [Virtual Lab Setup Guide](docs/Virtual-Lab-Setup-Guide.md)
+
+**Complete guide for setting up virtual networking labs with Proxmox and VMware.**
+
+- Hardware requirements and resource planning
+- Proxmox VE installation and configuration (test servers)
+- VMware Workstation/Player setup (PC/desktop)
+- Virtual network device software (routers, switches, firewalls)
+- IPv6 migration tools (Jool, TAYGA, 464XLAT, MAP-T/MAP-E)
+- Lab topologies for core telco, enterprise, and end-user networks
+- Troubleshooting and best practices
+
+**Perfect for hands-on learning and testing network configurations.**
 
 ### 🔧 [Router Configuration Cheatsheet](docs/Configuration-Cheatsheet.md)
 
@@ -92,6 +107,16 @@ networking-cheatsheet/
 │   └── emerging-technologies.md
 │
 └── docs/                              # Configuration and reference docs
+    ├── Virtual-Lab-Setup-Guide.md     # Virtual lab setup guide
+    ├── lab-setup/                      # Lab setup sections
+    │   ├── hardware-requirements.md
+    │   ├── proxmox-setup.md
+    │   ├── vmware-setup.md
+    │   ├── virtual-device-software.md
+    │   ├── ipv6-migration-tools.md
+    │   ├── lab-topologies.md
+    │   ├── troubleshooting.md
+    │   └── best-practices.md
     ├── Configuration-Cheatsheet.md
     ├── IPv6-Workshop-Guide.md
     └── Test-Lab-Addresses.md
@@ -103,8 +128,9 @@ networking-cheatsheet/
 
 1. Start with **[Networking Principles Guide](Networking-Principles.md)**
 2. Read through **[Beginner Level Fundamentals](beginner/fundamentals.md)**
-3. Practice with **[Router Configuration Cheatsheet](docs/Configuration-Cheatsheet.md)**
-4. Set up a lab using **[Test Lab Addresses](docs/Test-Lab-Addresses.md)**
+3. Set up a virtual lab using **[Virtual Lab Setup Guide](docs/Virtual-Lab-Setup-Guide.md)**
+4. Practice with **[Router Configuration Cheatsheet](docs/Configuration-Cheatsheet.md)**
+5. Use **[Test Lab Addresses](docs/Test-Lab-Addresses.md)** for IP planning
 
 ### For Intermediate Learners
 
@@ -122,9 +148,11 @@ networking-cheatsheet/
 
 ### For Specific Use Cases
 
+- **Virtual Lab Setup**: Follow [Virtual Lab Setup Guide](docs/Virtual-Lab-Setup-Guide.md)
 - **Router Configuration**: See [Configuration Cheatsheet](docs/Configuration-Cheatsheet.md)
 - **IPv6 Deployment**: Follow [IPv6 Workshop Guide](docs/IPv6-Workshop-Guide.md)
-- **Lab Setup**: Reference [Test Lab Addresses](docs/Test-Lab-Addresses.md)
+- **IPv6 Migration Tools**: See [IPv6 Migration Tools](docs/lab-setup/ipv6-migration-tools.md)
+- **Lab Address Planning**: Reference [Test Lab Addresses](docs/Test-Lab-Addresses.md)
 - **Network Security**: Read [Security Principles](security/security-principles.md)
 - **Problem Solving**: Check [Troubleshooting Guide](troubleshooting/troubleshooting.md)
 
@@ -143,6 +171,8 @@ This repository serves as a reference and educational resource for:
 ✅ **Progressive Learning Path**: From beginner to expert levels  
 ✅ **Domain Coverage**: Core telco, enterprise, and end-user networking  
 ✅ **Practical Examples**: Real configuration commands and examples  
+✅ **Virtual Lab Setup**: Complete guide for Proxmox and VMware environments  
+✅ **IPv6 Migration Tools**: Open-source tools for IPv6 transition  
 ✅ **Lab Resources**: Complete address allocation for test environments  
 ✅ **Cross-Referenced**: Links between related topics and documents  
 ✅ **Comprehensive**: Covers theory, implementation, and troubleshooting  
@@ -170,4 +200,4 @@ The configuration examples and addresses in this repository are intended for edu
 
 ---
 
-**Quick Links**: [Main Guide](Networking-Principles.md) | [Config Cheatsheet](docs/Configuration-Cheatsheet.md) | [IPv6 Guide](docs/IPv6-Workshop-Guide.md) | [Lab Addresses](docs/Test-Lab-Addresses.md)
+**Quick Links**: [Main Guide](Networking-Principles.md) | [Virtual Lab Setup](docs/Virtual-Lab-Setup-Guide.md) | [Config Cheatsheet](docs/Configuration-Cheatsheet.md) | [IPv6 Guide](docs/IPv6-Workshop-Guide.md) | [Lab Addresses](docs/Test-Lab-Addresses.md)

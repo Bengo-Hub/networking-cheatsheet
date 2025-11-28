@@ -96,6 +96,49 @@
 - **IPv6-only Networks**: Native IPv6 deployment
 - **IPv6 Transition Technologies**: Improved migration methods
 
+**IPv6 Migration Tools and Software:**
+
+- **NAT64/SIIT Tools**:
+  - **Jool**: Stateful NAT64 and stateless SIIT implementation for Linux
+    - High-performance kernel-based translation
+    - Supports DNS64 integration
+    - Website: https://www.jool.mx/
+  - **TAYGA**: User-space NAT64 implementation
+    - Simple configuration and deployment
+    - Good for testing and small deployments
+    - GitHub: https://github.com/fwdillema/tayga
+
+- **464XLAT**:
+  - Provides IPv4 connectivity to IPv6-only clients
+  - CLAT (Client-side Translator) and PLAT (Provider-side Translator)
+  - Implementation: clatd (https://github.com/toreanderson/clatd)
+  - RFC 6877: 464XLAT
+
+- **MAP-T/MAP-E**:
+  - **MAP-T**: Stateless IPv4-IPv6 translation (RFC 7599)
+  - **MAP-E**: Mapping with encapsulation (RFC 7597)
+  - Linux kernel support (since kernel 4.18)
+
+- **IPv6 Testing and Validation Tools**:
+  - **ping6/traceroute6**: Basic IPv6 connectivity testing
+  - **mtr6**: Advanced path analysis for IPv6
+  - **ndisc6**: IPv6 Neighbor Discovery Protocol tools
+  - **ipv6calc**: IPv6 address calculator and converter
+  - **Online Tools**: IPv6 test sites (test-ipv6.com, ipv6-test.com)
+
+- **IPv6 Migration Software**:
+  - **ISC DHCP (DHCPv6)**: DHCPv6 server for address assignment
+  - **RADVD**: Router Advertisement Daemon for SLAAC
+  - **BIND9**: DNS with full IPv6 support
+  - **FRR**: Free Range Routing with IPv6 protocol support (OSPFv3, BGP IPv6, IS-IS IPv6)
+
+- **IPv6 Monitoring Tools**:
+  - **Wireshark**: IPv6 packet analysis and capture
+  - **tcpdump**: IPv6 packet capture with filters
+  - **Flow Monitoring**: nfdump, pmacct, sflow with IPv6 support
+
+For detailed IPv6 migration tools and setup, see: [IPv6 Migration Tools](../docs/lab-setup/ipv6-migration-tools.md)
+
 ### Green Networking
 
 **Sustainability:**
@@ -146,6 +189,14 @@ These emerging technologies will shape the future of networking, requiring conti
 **Network Slicing:**
 - **3GPP TS 23.501**: 5G System Architecture (Network Slicing)
 - **ETSI NFV**: Network Function Virtualization standards
+
+**IPv6 Migration Resources:**
+- **Jool (NAT64/SIIT)**: https://www.jool.mx/
+- **TAYGA (NAT64)**: https://github.com/fwdillema/tayga
+- **clatd (464XLAT)**: https://github.com/toreanderson/clatd
+- **FRR (IPv6 Routing)**: https://frrouting.org/
+- **RADVD**: https://github.com/radvd-project/radvd
+- **IPv6 Test Tools**: https://test-ipv6.com/, https://ipv6-test.com/
 
 **Trusted Resources:**
 - **3GPP**: https://www.3gpp.org/
