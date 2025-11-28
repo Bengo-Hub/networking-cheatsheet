@@ -132,4 +132,104 @@
 - **Configuration Management**: Change control
 - **Security Management**: Threat detection, response
 
+**Detailed 5G Core Network Functions:**
+
+**5G Core (5GC) Network Functions:**
+
+1. **AMF (Access and Mobility Management Function)**:
+   - Manages connection and mobility
+   - Handles registration, connection management
+   - Interacts with UE (User Equipment) and RAN
+
+2. **SMF (Session Management Function)**:
+   - Manages PDU sessions
+   - IP address allocation
+   - QoS policy enforcement
+
+3. **UPF (User Plane Function)**:
+   - Packet routing and forwarding
+   - Anchor point for mobility
+   - Traffic measurement and reporting
+
+4. **UDM (Unified Data Management)**:
+   - Subscriber data management
+   - Authentication credentials
+   - Service authorization
+
+5. **AUSF (Authentication Server Function)**:
+   - Authentication services
+   - 5G authentication key generation
+
+6. **NRF (Network Repository Function)**:
+   - Service discovery
+   - NF registration and discovery
+
+**Service-Based Architecture (SBA):**
+- All NFs communicate via HTTP/2 REST APIs
+- Stateless design for scalability
+- Network slicing support
+
+**Transport Network Details:**
+
+**DWDM Systems:**
+- **Channels**: 40, 80, 160+ channels
+- **Channel Spacing**: 50 GHz, 100 GHz
+- **Speeds**: 10G, 40G, 100G, 400G per wavelength
+- **Range**: Long-haul (1000+ km), metro (80 km)
+- **Amplification**: EDFA (Erbium-Doped Fiber Amplifier)
+
+**Optical Transport Network (OTN) - ITU-T G.709:**
+- Wrapper technology for transparent transport
+- ODU (Optical Data Unit) hierarchy:
+  - ODU0: 1.25 Gbps
+  - ODU1: 2.5 Gbps
+  - ODU2: 10 Gbps
+  - ODU3: 40 Gbps
+  - ODU4: 100 Gbps
+  - ODUflex: Flexible rate
+
+**Carrier Ethernet Services (MEF Standards):**
+
+- **E-Line**: Point-to-point service
+  - EPL (Ethernet Private Line)
+  - EVPL (Ethernet Virtual Private Line)
+
+- **E-LAN**: Multipoint-to-multipoint service
+  - EPLAN (Ethernet Private LAN)
+  - EVPLAN (Ethernet Virtual Private LAN)
+
+- **E-Tree**: Rooted multipoint service
+  - EP-Tree (Ethernet Private Tree)
+  - EVP-Tree (Ethernet Virtual Private Tree)
+
+---
+
+## References
+
+**Telecommunications Standards:**
+- **3GPP Specifications**: https://www.3gpp.org/specifications
+- **ITU-T Recommendations**: https://www.itu.int/itu-t/recommendations/
+- **IEEE 802 Standards**: https://standards.ieee.org/standard/
+
+**5G Standards:**
+- **3GPP TS 23.501**: System Architecture for 5G System
+- **3GPP TS 23.502**: Procedures for 5G System
+- **3GPP TS 29.500**: 5G System; Technical Realization of Service Based Architecture
+
+**Transport Technologies:**
+- **ITU-T G.709**: Interfaces for Optical Transport Network (OTN)
+- **ITU-T G.872**: Architecture of Optical Transport Networks
+- **MEF Standards**: https://www.mef.net/standards-technical-specifications/
+
+**Signaling Protocols:**
+- **RFC 3261**: SIP: Session Initiation Protocol
+- **RFC 6733**: Diameter Base Protocol
+- **ITU-T Q.700**: Introduction to CCITT Signaling System No. 7
+
+**Trusted Resources:**
+- **3GPP**: https://www.3gpp.org/
+- **ITU-T**: https://www.itu.int/en/ITU-T/Pages/default.aspx
+- **IEEE Standards Association**: https://standards.ieee.org/
+- **MEF (Metro Ethernet Forum)**: https://www.mef.net/
+
 ---
